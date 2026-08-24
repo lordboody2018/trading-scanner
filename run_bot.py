@@ -10,6 +10,7 @@ from exchange import fetch_market
 from backtest import quick_stats
 from sentiment import get_current_fng
 from strategy import evaluate
+import tracker
 from telegram_alert import format_signal, send_message
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -62,6 +63,15 @@ def pretty(symbol: str) -> str:
 def scan_once(cfg, state):
     now = time.time()
     cooldown_sec = cfg.get("cooldown_hours", 6) * 3600
+    try:
+        outcomes, _ = tracker.check_trades(cfg)
+        for o in outcomes:
+            msg = tracker.format_outcome(o)
+            if send_message(cfg["telegram_bot_token"], cfg["telegram_chat_id"], msg):
+                print(f"[{o['name']}] outcome sent: {o['outcome']} ({o['r']:+.2f}R)")
+    except Exception as e:
+        print(f"tracker error: {e}")
+
     jobs = [("binance", s) for s in cfg.get("crypto_symbols", cfg.get("symbols", []))]
     jobs += [("yahoo", s) for s in cfg.get("market_symbols", [])]
 
@@ -99,6 +109,7 @@ def scan_once(cfg, state):
             state[key] = now
             save_state(state)
             log_signal(cfg, symbol, sig)
+            tracker.add_trade(sig, source, symbol, pretty(symbol))
             print(f"[{pretty(symbol)}] ALERT sent: {sig['direction']} entry={sig['entry']}")
 
 

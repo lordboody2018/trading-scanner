@@ -1,5 +1,4 @@
 config.json
 signals_log.csv
-signals_state.json
 __pycache__/
 *.pyc

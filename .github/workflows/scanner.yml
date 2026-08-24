@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "scanner-bot"
           git config user.email "actions@github.com"
-          git add signals_state.json || true
+          git add signals_state.json open_trades.json || true
           if git diff --cached --quiet; then
             echo "no changes"
           else
