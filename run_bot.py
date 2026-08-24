@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 import pandas as pd
 
 from exchange import fetch_market
+from backtest import quick_stats
 from strategy import evaluate
 from telegram_alert import format_signal, send_message
 
@@ -83,6 +84,10 @@ def scan_once(cfg, state):
             continue
 
         sig["source"] = source
+        st = quick_stats(cfg, source, symbol)
+        if st:
+            sig["win_rate"] = st["win_rate"]
+            sig["hist_trades"] = st["trades"]
         msg = f"🌐 {pretty(symbol)}\n" + format_signal(symbol, cfg["timeframe"], sig)
         if send_message(cfg["telegram_bot_token"], cfg["telegram_chat_id"], msg):
             state[key] = now

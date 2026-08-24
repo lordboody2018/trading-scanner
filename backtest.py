@@ -135,6 +135,44 @@ def run_backtest(cfg: dict, bars: int = 1000, verbose: bool = False) -> dict:
     }
 
 
+def quick_stats(cfg: dict, source: str, symbol: str, bars: int = 1000):
+    try:
+        raw = fetch_market(source, symbol, cfg["timeframe"], limit=min(bars + 10, 1000))
+        df = pd.DataFrame(raw)
+        d = prepare(df)
+        vol_required = _has_volume(d)
+
+        trades = wins = 0
+        pnl_r = 0.0
+        cooldown_end = -1
+        cooldown = int(6 * (60 / max(_tf_minutes(cfg["timeframe"]), 1)))
+
+        for i in range(210, len(d) - 2):
+            if i <= cooldown_end:
+                continue
+            if _signal_at(d.iloc[i], vol_required) is None:
+                continue
+            result = _simulate(d, i, cfg)
+            if result is None:
+                continue
+            outcome, r, exit_j = result
+            trades += 1
+            pnl_r += r
+            if outcome == "WIN":
+                wins += 1
+            cooldown_end = exit_j
+
+        if not trades:
+            return None
+        return {
+            "trades": trades,
+            "win_rate": round(wins / trades * 100),
+            "pnl_r": round(pnl_r, 2),
+        }
+    except Exception:
+        return None
+
+
 def _tf_minutes(tf: str) -> int:
     num = int(tf[:-1])
     unit = tf[-1]

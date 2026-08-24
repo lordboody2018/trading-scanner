@@ -24,4 +24,9 @@ def format_signal(symbol: str, tf: str, sig: dict) -> str:
         f"\U0001F4B0 الهدف: <code>{sig['take_profit']}</code>",
         f"RSI: {sig['rsi']} | تقلب: {sig['atr_pct']}%",
     ]
+    if "win_rate" in sig:
+        lines.append(
+            f"\U0001F4CA نسبة النجاح التقريبية: <b>{sig['win_rate']}%</b> "
+            f"(من {sig.get('hist_trades', 0)} صفقة سابقة - تاريخي مش ضمان)"
+        )
     return "\n".join(lines)
