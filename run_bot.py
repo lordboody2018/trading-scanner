@@ -8,6 +8,7 @@ import pandas as pd
 
 from exchange import fetch_market
 from backtest import quick_stats
+from sentiment import get_current_fng
 from strategy import evaluate
 from telegram_alert import format_signal, send_message
 
@@ -66,13 +67,14 @@ def scan_once(cfg, state):
 
     for source, symbol in jobs:
         try:
-            raw = fetch_market(source, symbol, cfg["timeframe"], limit=260)
+            raw = fetch_market(source, symbol, cfg["timeframe"], limit=1000)
         except Exception as e:
             print(f"[{symbol}] data error: {e}")
             continue
         raw = {k: v[:-1] for k, v in raw.items()}
         df = pd.DataFrame(raw)
-        sig = evaluate(df, cfg)
+        fng_val = get_current_fng() if source == "binance" else None
+        sig = evaluate(df, cfg, fng_val)
         if sig is None:
             print(f"[{pretty(symbol)}] لا إشارة")
             continue
