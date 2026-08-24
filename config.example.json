@@ -1,4 +1,4 @@
-﻿{
+{
     "telegram_bot_token": "PUT_TOKEN_OR_USE_SECRETS",
     "telegram_chat_id": "PUT_CHAT_ID_OR_USE_SECRETS",
     "timeframe": "15m",
