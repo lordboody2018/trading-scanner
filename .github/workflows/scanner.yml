@@ -1,0 +1,58 @@
+name: Trading Scanner
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trading-scanner
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Build config from secrets
+        run: |
+          python - <<'PY'
+          import json
+          cfg = json.load(open("config.example.json", encoding="utf-8"))
+          cfg["telegram_bot_token"] = "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+          cfg["telegram_chat_id"] = "${{ secrets.TELEGRAM_CHAT_ID }}"
+          json.dump(cfg, open("config.json", "w", encoding="utf-8"), ensure_ascii=False, indent=4)
+          PY
+
+      - name: Scan markets once
+        id: scan
+        run: python run_bot.py --once
+        continue-on-error: true
+
+      - name: Commit signal state
+        run: |
+          git config user.name "scanner-bot"
+          git config user.email "actions@github.com"
+          git add signals_state.json || true
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "state update [skip ci]"
+            git pull --rebase origin main || true
+            git push
+          fi
