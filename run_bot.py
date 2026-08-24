@@ -90,6 +90,10 @@ def scan_once(cfg, state):
         if st:
             sig["win_rate"] = st["win_rate"]
             sig["hist_trades"] = st["trades"]
+        min_wr = float(cfg.get("min_win_rate", 60))
+        if not st or sig.get("win_rate", 0) < min_wr:
+            print(f"[{pretty(symbol)}] {sig['direction']} skipped: WR={sig.get('win_rate', '?')}% < {min_wr}%")
+            continue
         msg = f"🌐 {pretty(symbol)}\n" + format_signal(symbol, cfg["timeframe"], sig)
         if send_message(cfg["telegram_bot_token"], cfg["telegram_chat_id"], msg):
             state[key] = now
