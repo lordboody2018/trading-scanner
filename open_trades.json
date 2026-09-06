@@ -1,1 +1,1 @@
-[]
+[{"id": "binance_XRPUSDT_LONG_1788687660", "source": "binance", "symbol": "XRPUSDT", "name": "XRPUSDT", "direction": "LONG", "entry": 1.4223, "sl": 1.40836, "tp": 1.43159, "sent_at": 1788687660.1635582}, {"id": "binance_LINKUSDT_LONG_1788687666", "source": "binance", "symbol": "LINKUSDT", "name": "LINKUSDT", "direction": "LONG", "entry": 12.313, "sl": 12.11691, "tp": 12.44372, "sent_at": 1788687666.3501186}]
