@@ -1,1 +1,1 @@
-[]
+[{"id": "binance_DOGEUSDT_LONG_1788785265", "source": "binance", "symbol": "DOGEUSDT", "name": "DOGEUSDT", "direction": "LONG", "entry": 0.09058, "sl": 0.08945, "tp": 0.09133, "sent_at": 1788785265.9373724}, {"id": "binance_AVAXUSDT_LONG_1788785268", "source": "binance", "symbol": "AVAXUSDT", "name": "AVAXUSDT", "direction": "LONG", "entry": 7.947, "sl": 7.82648, "tp": 8.02735, "sent_at": 1788785268.6616735}]
