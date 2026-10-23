@@ -1,1 +1,1 @@
-[]
+[{"id": "binance_BTCUSDT_SHORT_1792750479", "source": "binance", "symbol": "BTCUSDT", "name": "BTCUSDT", "direction": "SHORT", "entry": 81676.26, "sl": 82132.53, "tp": 81372.08, "sent_at": 1792750479.515073}, {"id": "binance_SOLUSDT_SHORT_1792750484", "source": "binance", "symbol": "SOLUSDT", "name": "SOLUSDT", "direction": "SHORT", "entry": 104.21, "sl": 105.0984, "tp": 103.6177, "sent_at": 1792750484.4462621}]
