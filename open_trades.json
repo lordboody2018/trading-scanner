@@ -1,1 +1,1 @@
-[]
+[{"id": "binance_LINKUSDT_SHORT_1793048399", "source": "binance", "symbol": "LINKUSDT", "name": "LINKUSDT", "direction": "SHORT", "entry": 11.343, "sl": 11.50276, "tp": 11.2365, "sent_at": 1793048399.2991168}, {"id": "binance_LTCUSDT_SHORT_1793048402", "source": "binance", "symbol": "LTCUSDT", "name": "LTCUSDT", "direction": "SHORT", "entry": 56.33, "sl": 57.0821, "tp": 55.8286, "sent_at": 1793048402.317507}]
